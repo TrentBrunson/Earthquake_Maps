@@ -1,3 +1,7 @@
+# Adding files to ignore
+config.py
+config.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
