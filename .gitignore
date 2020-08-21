@@ -1,5 +1,5 @@
 # Adding files to ignore
-config.py
+config.js
 config.txt
 
 # Byte-compiled / optimized / DLL files
