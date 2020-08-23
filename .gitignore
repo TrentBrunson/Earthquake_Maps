@@ -1,6 +1,5 @@
 # Adding files to ignore
 config.js
-config.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
