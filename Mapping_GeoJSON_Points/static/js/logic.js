@@ -136,14 +136,35 @@ let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/t
 streets.addTo(map);
 
 // Accessing the airport GeoJSON URL
+// let airportData = "https://raw.github.com/TrentBrunson/Earthquake_Maps/master/majorAirports.json";
+// let airportData = "https://raw.github.com/TrentBrunson/Earthquake_Maps/master/Mapping_GeoJSON_Points/majorAirports.json";
+// let airportData = "https://github.com/TrentBrunson/Earthquake_Maps/blob/Mapping_GeoJSON_Points/majorAirports.json";
+// Accessing the airport GeoJSON URL
 let airportData = "https://raw.githubusercontent.com/TrentBrunson/Earthquake_Maps/master/majorAirports.json";
 
 // Grabbing our GeoJSON data.
 d3.json(airportData).then(function(data) {
   console.log(data);
 // Creating a GeoJSON layer with the retrieved data.
-L.geoJson(data).addTo(map);
+  L.geoJson(data, 
+    {
+    onEachFeature: function(feature, layer) {
+      console.log(layer);
+      layer.bindPopup("<h2> Airport ICAO: " + feature.properties.icao +  
+      "</h2> <hr> <h3> Airport name: " + feature.properties.name + "</h3>");
+    }}
+  ).addTo(map);
 });
+// onEachFeature: function(feature, layer) {
+//   console.log(layer);
+//   layer.bindPopup("<h2> Airport ICAO: " + feature.properties.icao +  
+//   "</h2> <hr> <h3> Airport name: " + feature.properties.name + "</h3>");
+// //   return L.marker(latlng).bindPopup("<h2>" + feature.properties.city + ", CA, " 
+// //   + feature.properties.country + 
+// //   "</h2> <hr> <h3>" 
+// //   + feature.properties.name + "</h3>");
+// )}.addTo(map);
 
+// });
 
 
