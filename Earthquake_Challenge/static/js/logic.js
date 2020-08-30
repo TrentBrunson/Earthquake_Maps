@@ -37,13 +37,15 @@ let baseMaps = {
     Satellite: sat
 };
 
-// Create the earthquake layer for our map.
+// Create the earthquake layer & tectonic plate layers
 let earthquakes = new L.layerGroup();
+let plates = new L.layerGroup();
 
 // We define an object that contains the overlays.
 // This overlay will be visible all the time.
 let overlays = {
-  Earthquakes: earthquakes
+  Earthquakes: earthquakes,
+  Tectonic: plates
 };
 
 // Create the map object with center, zoom level and default layer.
@@ -147,17 +149,17 @@ legend.addTo(map);
 
 // adding tectonic plate graphics
 let tecPlates = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+// styling the lines
+let myStyle = {
+  color: "#ff00ff",
+  // color: "white",
+  weight: 1
+};
 
-d3.json(tecPlates).then(function(data){
-  function styleInfo(feature) {
-    return {
-      color: "white",
-      weight: 1
-  };
-  }
+d3.json(tecPlates).then(function(data) {
   L.geoJson(data, {
-    style: styleInfo
-  }).addTo(tecPlates);
+    style: myStyle
+  }).addTo(plates);
 });
 
-tecPlates.addTo(map);
+plates.addTo(map);
