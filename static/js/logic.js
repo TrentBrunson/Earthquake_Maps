@@ -39,15 +39,15 @@ let baseMaps = {
 
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
-	center: [44, -80],
-	zoom: 2,
-	layers: [light]
+	center: [43.7, -79.3],
+	zoom: 11,
+	layers: [streets]
 });
 // Pass our map layers into our layers control and add the layers control to the map.
 L.control.layers(baseMaps).addTo(map);
 
 // Access toronto routes data
-let torontoData = "https://raw.githubusercontent.com/TrentBrunson/Earthquake_Maps/master/torontoRoutes.json";
+let torontoData = "https://raw.githubusercontent.com/TrentBrunson/Earthquake_Maps/master/torontoNeighborhoods.json";
 
 
 
@@ -69,19 +69,21 @@ let torontoData = "https://raw.githubusercontent.com/TrentBrunson/Earthquake_Map
 // making function easier to read by pulling out formatting into mystyle var
 // Create a style for the lines.
 let myStyle = {
-	color: "#ffffa1",
-	weight: 2
+	color: "blue",
+  weight: 1,
+  fillColor: "yellow"
 }
 
 // Grabbing our GeoJSON data.
 d3.json(torontoData).then(function(data) {
     console.log(data);
   // Creating a GeoJSON layer with the retrieved data.
-  L.geoJson(data, {
+  L.geoJson(data, 
+    {
       style: myStyle,
       onEachFeature: function(feature, layer) {
-          layer.bindPopup("<h3> Airline: " + feature.properties.airline + "</h3> <hr> <h3> Destination: " 
-          + feature.properties.dst + "</h3>");
+          layer.bindPopup("<h3> Neighborhood: " + feature.properties.AREA_NAME + "</h3>");
       }
-  }).addTo(map);
+  }
+  ).addTo(map);
 });
