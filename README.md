@@ -24,5 +24,6 @@ https://github.com/fraxen/tectonicplates
 ---  
 
 ######
-
+Added a couple of more layers to the base layer option.  Also enabled tectonic plates and earthquakes as selectable options.
 ![](tecMap.png)
+[Image 1.] Selectable earthquake views.
