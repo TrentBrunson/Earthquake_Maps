@@ -37,6 +37,15 @@ let baseMaps = {
     Satellite: sat
 };
 
+// Create the earthquake layer for our map.
+let earthquakes = new L.layerGroup();
+
+// We define an object that contains the overlays.
+// This overlay will be visible all the time.
+let overlays = {
+  Earthquakes: earthquakes
+};
+
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
 	center: [39.5, -98.5],
@@ -45,7 +54,7 @@ let map = L.map('mapid', {
 });
 
 // Pass our map layers into our layers control and add the layers control to the map.
-L.control.layers(baseMaps).addTo(map);
+L.control.layers(baseMaps, overlays).addTo(map);
 
 // Retrieve the earthquake GeoJSON data.
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
@@ -103,5 +112,52 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     onEachFeature: function(feature, layer) {
       layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
     }
-  }).addTo(map);
+  }).addTo(earthquakes);
+  // adding earthquake layer to the map
+  earthquakes.addTo(map)
 });
+
+// creating custom legend
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function () {
+    // let div = L.DomUtil.create("div", "info legend");
+    var div = L.DomUtil.create('div', 'info legend');
+    const magnitudes = [0, 1, 2, 3, 4, 5];
+    const colors = [
+      "#98ee00",
+      "#d4ee00",
+      "#eecc00",
+      "#ee9c00",
+      "#ea822c",
+      "#ea2c2c"
+    ];
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < magnitudes.length; i++) {
+        div.innerHTML +=
+            '<i style="background: ' + colors[i] + '"></i> ' +
+            magnitudes[i] + (magnitudes[i + 1] ? '&mdash;' + magnitudes[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+
+legend.addTo(map);
+
+// adding tectonic plate graphics
+let tecPlates = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+
+d3.json(tecPlates).then(function(data){
+  function styleInfo(feature) {
+    return {
+      color: "white",
+      weight: 1
+  };
+  }
+  L.geoJson(data, {
+    style: styleInfo
+  }).addTo(tecPlates);
+});
+
+tecPlates.addTo(map);
